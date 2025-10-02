@@ -46,7 +46,7 @@ class EmployeeProfileWidget extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     radius: constraints.maxWidth * 0.08,
-                    backgroundImage: const NetworkImage('https://via.placeholder.com/150'),
+                    backgroundImage: const NetworkImage('https://picsum.photos/200/300'),
                   ),
                 ),
               ),
