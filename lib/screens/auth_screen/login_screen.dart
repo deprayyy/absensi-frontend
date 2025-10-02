@@ -43,8 +43,8 @@ class LoginScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    Colors.blueAccent.withOpacity(0.6),
-                                    Colors.purpleAccent.withOpacity(0.6),
+                                    Colors.blueAccent.withValues(alpha: 0.6),
+                                    Colors.purpleAccent.withValues(alpha: 0.6),
                                   ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -133,7 +133,8 @@ class LoginScreen extends StatelessWidget {
                                           MaterialPageRoute(builder: (_) => const RegisterScreen()),
                                         );
                                       },
-                                      child: Text("Belum punya akun? Daftar di sini",
+                                      child: Text(
+                                        "Belum punya akun? Daftar di sini",
                                         style: GoogleFonts.poppins(
                                           decoration: TextDecoration.underline,
                                           decorationColor: Colors.white,
@@ -180,14 +181,14 @@ class LoginScreen extends StatelessWidget {
           : null,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
+        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Colors.white, width: 2),
       ),
       filled: true,
-      fillColor: Colors.white.withOpacity(0.1),
+      fillColor: Colors.white.withValues(alpha: 0.1),
     );
   }
 }

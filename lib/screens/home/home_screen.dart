@@ -7,7 +7,7 @@ import '../../services/location_service.dart';
 import '../../services/time_service.dart';
 import '../../widgets/bottom_navbar.dart';
 import 'widgets/attendance_button.dart';
-import 'widgets/attendance_status.dart';
+// import 'widgets/attendance_status.dart';
 import 'widgets/employee_card.dart';
 import 'widgets/location_card.dart';
 import '../summary/summary_screen.dart';
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _screens = [
+    final List<Widget> screens = [
       HomeTabContent(locationService: locationService, timeService: timeService),
       const SummaryScreen(),
       const PermitScreen(),
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavBarWidget(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
@@ -136,8 +136,8 @@ class HomeTabContent extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           colors: [
-                                            Colors.blueAccent.withOpacity(0.9),
-                                            Colors.purpleAccent.withOpacity(0.9),
+                                            Colors.blueAccent.withValues(alpha: 0.9),
+                                            Colors.purpleAccent.withValues(alpha: 0.9),
                                           ],
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
@@ -145,7 +145,7 @@ class HomeTabContent extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(20),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(0.3),
+                                            color: Colors.black.withValues(alpha: 0.3),
                                             blurRadius: 10,
                                             offset: const Offset(0, 4),
                                           ),

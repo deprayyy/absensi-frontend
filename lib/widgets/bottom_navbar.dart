@@ -19,29 +19,7 @@ class BottomNavBarWidget extends StatefulWidget {
   State<BottomNavBarWidget> createState() => _BottomNavBarWidgetState();
 }
 
-class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
   // Helper method untuk responsive values
   double _getResponsiveValue(
       BuildContext context, {
@@ -50,10 +28,6 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
         required double large,
       }) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double aspectRatio = MediaQuery.of(context).size.aspectRatio;
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-
     // Breakpoints berdasarkan Material Design guidelines
     if (screenWidth < 360) {
       return small; // Small phones
@@ -68,20 +42,12 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
     return MediaQuery.of(context).size.width < 360;
   }
 
-  bool _isLargeScreen(BuildContext context) {
-    return MediaQuery.of(context).size.width > 600;
-  }
-
   bool _isLandscape(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.landscape;
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isSmallScreen = _isSmallScreen(context);
-    final bool isLargeScreen = _isLargeScreen(context);
-    final bool isLandscape = _isLandscape(context);
-
     // Responsive values menggunakan MediaQuery
     final double iconSize = _getResponsiveValue(
       context,
@@ -92,9 +58,9 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
 
     final double navBarHeight = _getResponsiveValue(
       context,
-      small: isLandscape ? 55.0 : 60.0,
-      medium: isLandscape ? 65.0 : 70.0,
-      large: isLandscape ? 70.0 : 80.0,
+      small: _isLandscape(context) ? 55.0 : 60.0,
+      medium: _isLandscape(context) ? 65.0 : 70.0,
+      large: _isLandscape(context) ? 70.0 : 80.0,
     );
 
     final double horizontalPadding = _getResponsiveValue(
@@ -149,20 +115,20 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.blueAccent.withOpacity(0.4),
-                      Colors.pinkAccent.withOpacity(0.4),
+                      Colors.blueAccent.withValues(alpha: 0.4),
+                      Colors.pinkAccent.withValues(alpha: 0.4),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                     width: 0.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 8,
                       spreadRadius: 1,
                       offset: const Offset(0, 2),
@@ -173,17 +139,16 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
                   selectedIndex: widget.selectedIndex,
                   onTabChange: (index) {
                     HapticFeedback.lightImpact();
-                    _controller.forward().then((_) => _controller.reverse());
                     widget.onItemTapped(index);
                   },
-                  rippleColor: Colors.white.withOpacity(0.05),
-                  hoverColor: Colors.white.withOpacity(0.02),
+                  rippleColor: Colors.white.withValues(alpha: 0.05),
+                  hoverColor: Colors.white.withValues(alpha: 0.02),
                   haptic: true,
                   tabBorderRadius: 16,
                   curve: Curves.easeOutExpo,
                   duration: const Duration(milliseconds: 500),
                   gap: gapSize,
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   activeColor: Colors.white,
                   iconSize: iconSize,
                   tabBackgroundColor: Colors.transparent,
@@ -281,7 +246,7 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
 
     return GButton(
       icon: icon,
-      iconColor: Colors.white.withOpacity(0.6),
+      iconColor: Colors.white.withValues(alpha: 0.6),
       iconActiveColor: Colors.white,
       backgroundColor: Colors.transparent,
       iconSize: iconSize,
@@ -308,7 +273,7 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget>
           boxShadow: isSelected
               ? [
             BoxShadow(
-              color: Colors.pinkAccent.withOpacity(0.3),
+              color: Colors.pinkAccent.withValues(alpha: 0.3),
               blurRadius: 10,
               spreadRadius: 2,
               offset: const Offset(0, 3),

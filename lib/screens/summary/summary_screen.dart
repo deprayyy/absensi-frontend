@@ -128,7 +128,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
               style: GoogleFonts.poppins(color: Colors.white),
             ),
           ),
-          backgroundColor: Colors.redAccent.withOpacity(0.9),
+          backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
