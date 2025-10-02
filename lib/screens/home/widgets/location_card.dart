@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:animate_do/animate_do.dart';
-import '../../services/location_service.dart';
+import '../../../services/location_service.dart';
 
 class LocationCard extends StatefulWidget {
   const LocationCard({super.key});

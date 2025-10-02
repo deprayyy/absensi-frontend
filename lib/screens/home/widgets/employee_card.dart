@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../screens/home/profile_screen.dart';
+import '../profile_screen.dart';
 // import 'package:mapss/widgets/widget_utils.dart';
 
 class EmployeeProfileWidget extends StatelessWidget {

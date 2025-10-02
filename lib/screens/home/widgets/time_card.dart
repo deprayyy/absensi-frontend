@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../services/time_service.dart';
+import '../../../services/time_service.dart';
 
 class TimeCard extends StatefulWidget {
   final TimeService timeService;

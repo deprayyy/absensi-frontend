@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../screens/home/home_screen.dart';
 import '../../services/auth_service.dart';
-import '../../widgets/login/show_dialog.dart';
+import '../../screens/auth_screen/widgets/show_dialog.dart';
 
 class LoginController with ChangeNotifier {
   final usernameController = TextEditingController();

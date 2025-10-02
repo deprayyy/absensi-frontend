@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mapss/services/auth_service.dart';
-import 'package:mapss/screens/leave_screen.dart';
+import 'package:mapss/screens/leave/leave_screen.dart';
 import '../../services/location_service.dart';
 import '../../services/time_service.dart';
 import '../../widgets/bottom_navbar.dart';
-import '../../widgets/home/attendance_button.dart';
-import '../../widgets/home/attendance_status.dart';
-import '../../widgets/home/employee_card.dart';
-import '../../widgets/home/location_card.dart';
-import '../summary_screen.dart';
-import '../permit_screen.dart';
-import '../../widgets/home/time_card.dart';
-import '../../widgets/home/widget_utils.dart';
+import 'widgets/attendance_button.dart';
+import 'widgets/attendance_status.dart';
+import 'widgets/employee_card.dart';
+import 'widgets/location_card.dart';
+import '../summary/summary_screen.dart';
+import '../permit/permit_screen.dart';
+import 'widgets/time_card.dart';
+import 'widgets/widget_utils.dart';
 import '../auth_screen/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
