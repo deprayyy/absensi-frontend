@@ -22,12 +22,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   final TextEditingController activityController = TextEditingController();
 
   Future<bool> _requestCameraPermission() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final status = await Permission.camera.request();
     if (status.isGranted) {
       return true;
     } else if (status.isPermanentlyDenied) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: FadeInUp(
               duration: const Duration(milliseconds: 300),
@@ -36,7 +37,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 style: GoogleFonts.poppins(color: Colors.white),
               ),
             ),
-            backgroundColor: Colors.redAccent.withOpacity(0.9),
+            backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -51,7 +52,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       return false;
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: FadeInUp(
               duration: const Duration(milliseconds: 300),
@@ -60,7 +61,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 style: GoogleFonts.poppins(color: Colors.white),
               ),
             ),
-            backgroundColor: Colors.redAccent.withOpacity(0.9),
+            backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -72,6 +73,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   }
 
   Future<void> _pickImage() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final hasPermission = await _requestCameraPermission();
     if (!hasPermission) return;
 
@@ -80,7 +82,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       if (pickedFile != null && context.mounted) {
         setState(() => _image = File(pickedFile.path));
       } else if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: FadeInUp(
               duration: const Duration(milliseconds: 300),
@@ -89,7 +91,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 style: GoogleFonts.poppins(color: Colors.white),
               ),
             ),
-            backgroundColor: Colors.redAccent.withOpacity(0.9),
+            backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -98,7 +100,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: FadeInUp(
               duration: const Duration(milliseconds: 300),
@@ -107,7 +109,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 style: GoogleFonts.poppins(color: Colors.white),
               ),
             ),
-            backgroundColor: Colors.redAccent.withOpacity(0.9),
+            backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -118,8 +120,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   }
 
   Future<void> _submit() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(
           content: FadeInUp(
             duration: const Duration(milliseconds: 300),
@@ -128,7 +131,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               style: GoogleFonts.poppins(color: Colors.white),
             ),
           ),
-          backgroundColor: Colors.redAccent.withOpacity(0.9),
+          backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -138,7 +141,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     }
 
     if (activityController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         SnackBar(
           content: FadeInUp(
             duration: const Duration(milliseconds: 300),
@@ -147,7 +150,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               style: GoogleFonts.poppins(color: Colors.white),
             ),
           ),
-          backgroundColor: Colors.redAccent.withOpacity(0.9),
+          backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -170,58 +173,64 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       );
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: FadeInUp(
-              duration: const Duration(milliseconds: 300),
-              child: Text(
-                "Clock-out berhasil!",
-                style: GoogleFonts.poppins(color: Colors.white),
+        if (context.mounted) {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: FadeInUp(
+                duration: const Duration(milliseconds: 300),
+                child: Text(
+                  "Clock-out berhasil!",
+                  style: GoogleFonts.poppins(color: Colors.white),
+                ),
               ),
+              backgroundColor: Colors.green.withValues(alpha: 0.9),
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.all(16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            backgroundColor: Colors.green.withOpacity(0.9),
-            behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.all(16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
-        if (context.mounted) Navigator.pop(context);
+          );
+          Navigator.pop(context);
+        }
       } else {
         final message = response.data is Map && response.data['message'] != null
             ? response.data['message']
             : "Gagal clock-out. Status code: ${response.statusCode}";
-        ScaffoldMessenger.of(context).showSnackBar(
+        if (context.mounted) {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: FadeInUp(
+                duration: const Duration(milliseconds: 300),
+                child: Text(
+                  message,
+                  style: GoogleFonts.poppins(color: Colors.white),
+                ),
+              ),
+              backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.all(16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        scaffoldMessenger.showSnackBar(
           SnackBar(
             content: FadeInUp(
               duration: const Duration(milliseconds: 300),
               child: Text(
-                message,
+                "Error: $e",
                 style: GoogleFonts.poppins(color: Colors.white),
               ),
             ),
-            backgroundColor: Colors.redAccent.withOpacity(0.9),
+            backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: FadeInUp(
-            duration: const Duration(milliseconds: 300),
-            child: Text(
-              "Error: $e",
-              style: GoogleFonts.poppins(color: Colors.white),
-            ),
-          ),
-          backgroundColor: Colors.redAccent.withOpacity(0.9),
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-      );
     } finally {
       if (context.mounted) setState(() => isLoading = false);
     }
@@ -292,8 +301,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.blueAccent.withOpacity(0.3),
-                                  Colors.purpleAccent.withOpacity(0.3),
+                                  Colors.blueAccent.withValues(alpha: 0.3),
+                                  Colors.purpleAccent.withValues(alpha: 0.3),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -301,7 +310,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withValues(alpha: 0.2),
                                   blurRadius: 12,
                                   offset: const Offset(0, 6),
                                 ),
@@ -345,10 +354,18 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        borderSide: BorderSide.none,
+                                        borderSide: const BorderSide(color: Colors.white70, width: 1),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(color: Colors.white70, width: 1),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(color: Colors.white, width: 1.5),
                                       ),
                                       filled: true,
-                                      fillColor: Colors.white.withOpacity(0.2),
+                                      fillColor: Colors.white.withValues(alpha: 0.2),
                                       contentPadding: const EdgeInsets.all(20),
                                     ),
                                     style: GoogleFonts.poppins(
@@ -362,7 +379,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       // Image Card with Frosted Glass Effect
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
@@ -372,8 +389,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.blueAccent.withOpacity(0.3),
-                                  Colors.purpleAccent.withOpacity(0.3),
+                                  Colors.blueAccent.withValues(alpha: 0.3),
+                                  Colors.purpleAccent.withValues(alpha: 0.3),
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -381,7 +398,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withValues(alpha: 0.2),
                                   blurRadius: 12,
                                   offset: const Offset(0, 6),
                                 ),
@@ -396,7 +413,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Colors.grey.withOpacity(0.2),
+                                      color: Colors.grey.withValues(alpha: 0.2),
                                     ),
                                     padding: const EdgeInsets.all(20),
                                     child: const Icon(
@@ -455,7 +472,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       // Take Photo Button
                       FadeInUp(
                         duration: const Duration(milliseconds: 900),
@@ -463,7 +480,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           onTap: _pickImage,
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
-                            transform: Matrix4.identity()..scale(_pickImage != null ? 1.0 : 0.95),
+                            transform: Matrix4.identity()..scale(_image != null ? 1.0 : 0.95),
+                            constraints: const BoxConstraints(minWidth: 200),
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                               decoration: BoxDecoration(
@@ -475,14 +493,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withValues(alpha: 0.2),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   const Icon(Icons.camera_alt, color: Colors.white, size: 24),
                                   const SizedBox(width: 12),
@@ -509,6 +527,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             transform: Matrix4.identity()..scale(isLoading ? 0.95 : 1.0),
+                            constraints: const BoxConstraints(minWidth: 200),
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                               decoration: BoxDecoration(
@@ -522,7 +541,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withValues(alpha: 0.2),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -538,7 +557,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                 ),
                               )
                                   : Row(
-                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   const Icon(Icons.logout, color: Colors.white, size: 24),
                                   const SizedBox(width: 12),
@@ -564,14 +583,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             // Loading Overlay
             if (isLoading)
               Container(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 child: Center(
                   child: ZoomIn(
                     duration: const Duration(milliseconds: 300),
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
