@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mapss/screens/home/check_in/check_in_screen.dart';
-import '../check_out_screen.dart';
+import '../check_out/check_out_screen.dart';
 import 'widget_utils.dart';
 
 class AttendanceButtonWidget extends StatelessWidget {
