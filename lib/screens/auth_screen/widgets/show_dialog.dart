@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 enum DialogType { success, error, warning, info }
 
@@ -10,7 +9,6 @@ class ModernDialog {
         String? title,
         String? message,
         Widget? customContent,
-        String? lottieAsset,
         bool autoClose = false,
         Duration autoCloseDuration = const Duration(seconds: 1),
         VoidCallback? onClose,
@@ -46,6 +44,7 @@ class ModernDialog {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+          backgroundColor: _getBackgroundColor(type),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -54,29 +53,9 @@ class ModernDialog {
                 if (customContent != null)
                   customContent
                 else ...[
-                  if (lottieAsset != null)
-                    Lottie.asset(
-                      lottieAsset,
-                      width: 120,
-                      height: 120,
-                      repeat: false,
-                    )
-                  else
-                    Icon(iconData, color: iconColor, size: 70),
-                  if (title != null) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: iconColor,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                  Icon(iconData, color: iconColor, size: 70),
                   if (message != null && message.isNotEmpty) ...[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
                       message,
                       style: const TextStyle(fontSize: 16),
@@ -96,6 +75,21 @@ class ModernDialog {
         Navigator.of(context, rootNavigator: true).pop();
         onClose?.call();
       });
+    }
+  }
+
+  static Color _getBackgroundColor(DialogType type) {
+    switch (type) {
+      case DialogType.success:
+        return Colors.green[50]!;
+      case DialogType.error:
+        return Colors.red[50]!;
+      case DialogType.warning:
+        return Colors.orange[50]!;
+      case DialogType.info:
+        return Colors.blue[50]!;
+      default:
+        return Colors.grey[50]!;
     }
   }
 }

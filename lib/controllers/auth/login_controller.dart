@@ -23,6 +23,7 @@ class LoginController with ChangeNotifier {
     _setLoading(true);
 
     try {
+      print('Starting login with username: ${usernameController.text.trim()}');
       final response = await AuthService().login(
         usernameController.text.trim(),
         passwordController.text.trim(),
@@ -31,17 +32,23 @@ class LoginController with ChangeNotifier {
       final statusCode = response.statusCode ?? 500;
       final message = response.data['message'] ?? "";
 
-      if (statusCode == 200) {
-        final token = response.data['token'];
+      print('Login response status: $statusCode');
+      print('Login response data: ${response.data}');
+
+      if (statusCode == 200 && response.data['data']?['token'] != null) {
+        final token = response.data['data']['token'];
         final prefs = await SharedPreferences.getInstance();
+        print('Saving token: $token');
         await prefs.setString('token', token);
 
         ModernDialog.show(
           context,
           type: DialogType.success,
           title: "Login Berhasil",
+          message: "Selamat, Anda berhasil login!",
           autoClose: true,
           onClose: () {
+            print('Navigating to HomeScreen');
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -49,22 +56,29 @@ class LoginController with ChangeNotifier {
           },
         );
       } else {
+        print('Invalid response format or authentication failed');
         ModernDialog.show(
           context,
           type: DialogType.error,
-          message: message.isNotEmpty
-              ? message
-              : "Username atau password salah. Coba lagi.",
+          message: "Username atau password salah",
         );
       }
-    } catch (_) {
-      ModernDialog.show(
-        context,
-        type: DialogType.warning,
-        title: "Gangguan Server",
-        message:
-        "Tidak dapat terhubung ke server.\nPeriksa koneksi internet Anda lalu coba lagi.",
-      );
+    } catch (e) {
+      print('Login error: $e');
+      if (e.toString().contains('Invalid username or password')) {
+        ModernDialog.show(
+          context,
+          type: DialogType.error,
+          message: "Username atau password salah",
+        );
+      } else {
+        ModernDialog.show(
+          context,
+          type: DialogType.warning,
+          title: "Gangguan Server",
+          message: "Tidak dapat terhubung ke server. Periksa koneksi internet Anda lalu coba lagi.",
+        );
+      }
     } finally {
       _setLoading(false);
     }
