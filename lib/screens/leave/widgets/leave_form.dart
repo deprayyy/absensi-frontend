@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -15,13 +14,13 @@ class LeaveForm extends StatefulWidget {
   final String? duration;
   final String remarks;
   final Function(String?) onLeaveTypeChanged;
-  final Function(String?) onBalanceSaved; // Changed to String? to match TextFormField
+  final Function(String?) onBalanceSaved;
   final Function(DateTime?) onStartDateChanged;
   final Function(DateTime?) onEndDateChanged;
-  final Function(String?) onDurationChanged;
   final Function(String?) onRemarksSaved;
   final VoidCallback onSubmit;
   final bool isEditing;
+  final bool isSubmitting; // Tambahkan parameter ini
 
   const LeaveForm({
     super.key,
@@ -36,10 +35,10 @@ class LeaveForm extends StatefulWidget {
     required this.onBalanceSaved,
     required this.onStartDateChanged,
     required this.onEndDateChanged,
-    required this.onDurationChanged,
     required this.onRemarksSaved,
     required this.onSubmit,
     required this.isEditing,
+    this.isSubmitting = false, // Default false
   });
 
   @override
@@ -51,8 +50,8 @@ class _LeaveFormState extends State<LeaveForm> {
     final picked = await showDatePicker(
       context: context,
       initialDate: isStart ? widget.startDate ?? DateTime.now() : widget.endDate ?? DateTime.now(),
-      firstDate: DateTime(2025, 1, 1),
-      lastDate: DateTime(2026, 12, 31),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
       builder: (context, child) {
         return Theme(
           data: ThemeData.dark().copyWith(
@@ -68,6 +67,10 @@ class _LeaveFormState extends State<LeaveForm> {
     if (picked != null) {
       if (isStart) {
         widget.onStartDateChanged(picked);
+      } else if (!isStart && widget.startDate != null && picked.isBefore(widget.startDate!)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('End date must be after or equal to start date')),
+        );
       } else {
         widget.onEndDateChanged(picked);
       }
@@ -97,9 +100,14 @@ class _LeaveFormState extends State<LeaveForm> {
                     value: widget.leaveType,
                     hint: Text("Select Leave Type", style: GoogleFonts.poppins(color: Colors.white70)),
                     dropdownColor: Colors.white,
-                    items: ["Cuti Tahunan", "Cuti Sakit", "Cuti Khusus", "Lainnya"]
-                        .map((val) => DropdownMenuItem(value: val, child: Text(val)))
-                        .toList(),
+                    items: [
+                      {'display': 'Cuti Tahunan', 'value': 'tahunan'},
+                      {'display': 'Cuti Khusus', 'value': 'khusus'},
+                      {'display': 'Lainnya', 'value': 'lainnya'},
+                    ].map((item) => DropdownMenuItem(
+                      value: item['value'],
+                      child: Text(item['display']!, style: GoogleFonts.poppins()),
+                    )).toList(),
                     onChanged: widget.onLeaveTypeChanged,
                     validator: (val) => val == null ? "Pilih leave type" : null,
                     decoration: buildInputDecoration("Leave Type", Icons.category),
@@ -109,8 +117,13 @@ class _LeaveFormState extends State<LeaveForm> {
                     initialValue: widget.balance?.toString() ?? '',
                     keyboardType: TextInputType.number,
                     decoration: buildInputDecoration("Balance (sisa cuti)", Icons.account_balance_wallet),
-                    onSaved: widget.onBalanceSaved, // Line 112: Now compatible with String?
-                    validator: (val) => val!.isEmpty ? "Masukkan balance" : null,
+                    onSaved: widget.onBalanceSaved,
+                    validator: (val) {
+                      if (val == null || val.isEmpty) return "Masukkan balance";
+                      final balance = int.tryParse(val);
+                      if (balance == null || balance < 0) return "Masukkan angka valid";
+                      return null;
+                    },
                     style: const TextStyle(color: Colors.white),
                   ),
                   const SizedBox(height: 14),
@@ -148,16 +161,12 @@ class _LeaveFormState extends State<LeaveForm> {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  DropdownButtonFormField<String>(
-                    value: widget.duration,
-                    hint: Text("Select Duration", style: GoogleFonts.poppins(color: Colors.white70)),
-                    dropdownColor: Colors.white,
-                    items: ["0.5 hari", "1 hari", "2 hari", "3 hari", "5 hari"]
-                        .map((val) => DropdownMenuItem(value: val, child: Text(val)))
-                        .toList(),
-                    onChanged: widget.onDurationChanged,
-                    validator: (val) => val == null ? "Pilih durasi" : null,
-                    decoration: buildInputDecoration("Duration Leave", Icons.timelapse),
+                  InputDecorator(
+                    decoration: buildInputDecoration("Duration", Icons.timelapse),
+                    child: Text(
+                      widget.duration ?? "Select dates to calculate duration",
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(height: 14),
                   TextFormField(
@@ -180,14 +189,23 @@ class _LeaveFormState extends State<LeaveForm> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: ElevatedButton(
-                      onPressed: widget.onSubmit,
+                      onPressed: widget.isSubmitting ? null : widget.onSubmit, // Nonaktifkan saat submitting
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
-                      child: Text(
+                      child: widget.isSubmitting // Tampilkan loading jika submitting
+                          ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                          : Text(
                         widget.isEditing ? "Update" : "Submit",
                         style: GoogleFonts.poppins(
                           color: Colors.white,
