@@ -42,7 +42,10 @@ class LoginController with ChangeNotifier {
         print('Saving token: $token');
         await prefs.setString('token', token);
         await prefs.setString('user_name', userData['name']); // Simpan nama
+        await prefs.setString('user_username', userData['username']); // Simpan username
+        await prefs.setString('user_email', userData['email']); // Simpan email
         await prefs.setString('user_position', userData['position']); // Simpan posisi
+        await prefs.setBool('face_registered', false); // Simpan status faceRegistered (default false, bisa diubah nanti)
 
         ModernDialog.show(
           context,
