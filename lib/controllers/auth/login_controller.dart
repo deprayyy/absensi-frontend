@@ -37,9 +37,12 @@ class LoginController with ChangeNotifier {
 
       if (statusCode == 200 && response.data['data']?['token'] != null) {
         final token = response.data['data']['token'];
+        final userData = response.data['data']['user'];
         final prefs = await SharedPreferences.getInstance();
         print('Saving token: $token');
         await prefs.setString('token', token);
+        await prefs.setString('user_name', userData['name']); // Simpan nama
+        await prefs.setString('user_position', userData['position']); // Simpan posisi
 
         ModernDialog.show(
           context,
